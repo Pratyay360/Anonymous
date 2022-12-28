@@ -44,15 +44,15 @@ from multiprocessing import Process, Manager, Pool
 import urllib.parse, ssl
 import sys, getopt, random, time, os
 
-# # Python version-specific 
-# if  sys.version_info < (3,0):
-#     # Python 2.x
-#     import httplib
-#     HTTPCLIENT = httplib
-# else:
+# Python version-specific 
+if  sys.version_info < (3,0):
+    # Python 2.x
+    import httplib
+    HTTPCLIENT = httplib
+else:
     # Python 3.x
-import http.client
-HTTPCLIENT = http.client
+    import http.client
+    HTTPCLIENT = http.client
 
 ####
 # Config
@@ -146,7 +146,7 @@ class GoldenEye(object):
 
     def exit(self):
         self.stats()
-        print("Shutting down GoldenEye")
+        print ("Shutting down GoldenEye")
 
     def __del__(self):
         self.exit()
@@ -155,14 +155,14 @@ class GoldenEye(object):
 
         # Taunt!
         print()
-        print (GOLDENEYE_BANNER)
+        print( GOLDENEYE_BANNER)
         print()
 
     # Do the fun!
     def fire(self):
 
         self.printHeader()
-        print( "Hitting webserver in mode '{0}' with {1} workers running {2} connections each. Hit CTRL+C to cancel.".format(self.method, self.nr_workers, self.nr_sockets))
+        print ("Hitting webserver in mode '{0}' with {1} workers running {2} connections each. Hit CTRL+C to cancel.".format(self.method, self.nr_workers, self.nr_sockets))
 
         if DEBUG:
             print ("Starting {0} concurrent workers".format(self.nr_workers))
@@ -213,7 +213,7 @@ class GoldenEye(object):
                 self.stats()
 
             except (KeyboardInterrupt, SystemExit):
-                print( "CTRL+C received. Killing all workers")
+                print ("CTRL+C received. Killing all workers")
                 for worker in self.workersQueue:
                     try:
                         if DEBUG:
@@ -538,23 +538,23 @@ class Striker(Process):
 ####
 
 def usage():
-    print
-    print ('-----------------------------------------------------------------------------------------------------------')
-    print
-    print (GOLDENEYE_BANNER)
-    print 
-    print (' USAGE: ./goldeneye.py <url> [OPTIONS]')
-    print
-    print (' OPTIONS:')
-    print ('\t Flag\t\t\tDescription\t\t\t\t\t\tDefault')
-    print ('\t -u, --useragents\tFile with user-agents to use\t\t\t\t(default: randomly generated)')
-    print ('\t -w, --workers\t\tNumber of concurrent workers\t\t\t\t(default: {0})'.format(DEFAULT_WORKERS))
-    print ('\t -s, --sockets\t\tNumber of concurrent sockets\t\t\t\t(default: {0})'.format(DEFAULT_SOCKETS))
-    print ('\t -m, --method\t\tHTTP Method to use \'get\' or \'post\'  or \'random\'\t\t(default: get)')
-    print ('\t -d, --debug\t\tEnable Debug Mode [more verbose output]\t\t\t(default: False)')
-    print ('\t -h, --help\t\tShows this help')
-    print
-    print ('-----------------------------------------------------------------------------------------------------------')
+    print()
+    print( '-----------------------------------------------------------------------------------------------------------')
+    print()
+    print( GOLDENEYE_BANNER)
+    print( )
+    print( ' USAGE: ./goldeneye.py <url> [OPTIONS]')
+    print()
+    print( ' OPTIONS:')
+    print( '\t Flag\t\t\tDescription\t\t\t\t\t\tDefault')
+    print( '\t -u, --useragents\tFile with user-agents to use\t\t\t\t(default: randomly generated)')
+    print( '\t -w, --workers\t\tNumber of concurrent workers\t\t\t\t(default: {0})'.format(DEFAULT_WORKERS))
+    print( '\t -s, --sockets\t\tNumber of concurrent sockets\t\t\t\t(default: {0})'.format(DEFAULT_SOCKETS))
+    print( '\t -m, --method\t\tHTTP Method to use \'get\' or \'post\'  or \'random\'\t\t(default: get)')
+    print( '\t -d, --debug\t\tEnable Debug Mode [more verbose output]\t\t\t(default: False)')
+    print( '\t -h, --help\t\tShows this help')
+    print()
+    print( '-----------------------------------------------------------------------------------------------------------')
 
     
 def error(msg):

